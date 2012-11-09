@@ -10,3 +10,6 @@ class BrainX:
 
 	def learn(self):
 		pass
+
+	def reset(self):
+		pass

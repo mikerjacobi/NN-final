@@ -18,6 +18,7 @@ const char *pyfile = "Controller.py";
 PyObject *controller, *run_brain, *learn;
 PyObject *reset, *update_stats, *process_stats;
 int last_object = 0;
+AGENT_TYPE *current_agent;
 
 #define PY(cmd) cmd; PyCheckError(#cmd);
 void PyCheckError(const char * err){
@@ -50,7 +51,6 @@ void init(int graphics, int verbose_flag)
 {
 	int brain = 0;
 
-  AGENT_TYPE *current_agent;
   AGENT_TYPE *agent ;
   GEOMETRIC_SHAPE_TYPE *agentshape  ;
   ACOUSTIC_SHAPE_TYPE *sound ;
@@ -328,7 +328,7 @@ int agents_controller( WORLD_TYPE *w )
     set_agent_body_position( a, x, y, h );
 
     //PY(result = PyObject_CallMethodObjArgs(controller, reset, NULL));
-    Py_XDECREF(result);
+    //Py_XDECREF(result);
 
     return 0;
     

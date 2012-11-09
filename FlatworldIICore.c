@@ -8,6 +8,9 @@
  */
   
 /*------------------------ General functions -------------------------------------------------------------------*/
+
+#pragma GCC system_header
+
 float min( float x, float y) 
 {
   if( x<y ) 
