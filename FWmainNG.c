@@ -44,7 +44,8 @@ int main(int argc, char** argv)
   	{
     	agents_controller( Flatworld ) ;
     	simtime++ ;
-		printf("%d\n",simtime);
+		if (simtime%2000==0)
+			printf("simtime:%d ",simtime);
   	}
 
   	printf("main- terminating normally.\n") ;

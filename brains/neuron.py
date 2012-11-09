@@ -22,37 +22,40 @@ def vMult(a,scalar):
 
 
 class Neuron:
-    id=(0,0)
-    inputNeurons=[]
-    weights=[]
-    eta=1
-    y=0
+    name=None
+    inputNeurons=None
+    weights=None
+    eta=None
+    y=None
     delta=None
-    bias=0
-    deltaW=0
-    function=''
-    center=0
-    sigma=0
+    bias=None
+    deltaW=None
+    function=None
+    center=None
+    sigma=None
+    constant=None
     
-    def __init__(self, passedWeights, inputNeurons, eta,id,function,center,sigma):
-        self.weights = passedWeights
+    def __init__(self, weights, inputNeurons, eta,name,function,a,b):
+        self.weights = weights
         self.eta=eta
-        self.id=id
+        self.name=name
         self.inputNeurons=inputNeurons
         self.function=function
         if function=='radial':
-            self.center=center
-            self.sigma=sigma
+            self.center=float(a)
+            self.sigma=float(b)
+        elif function=='constant':
+            self.constant=float(a)
 
 
-    def __len__(self):
-        return 9999
+    #def __len__(self):
+    #    return 9999
 
     def __repr__(self):
-        return '[%s, node%s]'%(str(self.id[0]),str(self.id[1]))
+        return self.name
 
     def __str__(self):
-        return '[%s, node%s]'%(str(self.id[0]),str(self.id[1]))
+        return self.name
 
     def propagate(self):
         if self.function=='input':
@@ -71,15 +74,20 @@ class Neuron:
             self.y=math.exp((-.5)*(r**2)/(self.sigma**2))
         elif self.function=='bias':
             self.y=1
+        elif self.function=='constant':
+            self.y=self.constant
 
         return self.y
 
     def updateWeights(self,d):
-        scalar=(d-self.y)*self.eta
-        inputs=[]
-        for IN in self.inputNeurons: inputs.append(IN.y)
-        scaledInput=vMult(inputs, scalar)
-        self.weights=vAdd(self.weights,scaledInput)
+        if self.function=='constant':
+            pass
+        else:
+            scalar=(d-self.y)*self.eta
+            inputs=[]
+            for IN in self.inputNeurons: inputs.append(IN.y)
+            scaledInput=vMult(inputs, scalar)
+            self.weights=vAdd(self.weights,scaledInput)
 
 
 

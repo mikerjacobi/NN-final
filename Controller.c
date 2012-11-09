@@ -90,7 +90,6 @@ void init(int graphics, int verbose_flag)
   }
   
   // create and initialize the world 
-  //Flatworld = make_world( 0, 10, 610, 100.0, -100.0, 100.0, -100.0 ) ;
   Flatworld = make_world( 0, 1, 600, 100.0, -100.0, 100.0, -100.0, 0 ) ;
   read_object_spec_file( Flatworld, "WorldObjects.dat" ) ;
 
@@ -124,7 +123,7 @@ void init(int graphics, int verbose_flag)
   PY(controller = PyDict_GetItemString(global_dict,"controller"));
   PY(run_brain = PyString_FromString("run_brain"));
   PY(learn = PyString_FromString("learn"));
-  //PY(reset = PyString_FromString("reset"));
+  PY(reset = PyString_FromString("reset"));
   //PY(process_stats = PyString_FromString("process_stats"));
   //PY(update_stats = PyString_FromString("update_stats"));
 
@@ -303,7 +302,7 @@ int agents_controller( WORLD_TYPE *w )
   else
   {
     // Example of agent is dead condition 
-    printf("agent_controller- Agent has died, eating %d objects.\n",a->instate->itemp[0]) ;
+    //printf("agent_controller- Agent has died, eating %d objects.\n",a->instate->itemp[0]) ;
     //print_world_time( Flatworld) ;
     now = time(NULL) ;
     date = localtime( &now ) ;
@@ -327,8 +326,8 @@ int agents_controller( WORLD_TYPE *w )
     // set new position and heading of agent
     set_agent_body_position( a, x, y, h );
 
-    //PY(result = PyObject_CallMethodObjArgs(controller, reset, NULL));
-    //Py_XDECREF(result);
+    PY(result = PyObject_CallMethodObjArgs(controller, reset, NULL));
+    Py_XDECREF(result);
 
     return 0;
     
