@@ -11,7 +11,6 @@ class Brain0:
 		pass
 
 	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
-		print charge
 		return 0,0,0,0,0
 
 	def run_brain(self, args):

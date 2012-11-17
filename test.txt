@@ -1,0 +1,3 @@
+survival duration: 2000
+number foods eaten: 0
+distance from center: 0.000000

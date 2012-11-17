@@ -18,16 +18,24 @@ from Brain0 import Brain0
 from Brain1 import Brain1
 
 class Controller:
+	survivalDuration=0
+	numFoodEaten=0
+	distanceFromOrigin=0
+
 	def __init__(self):
+		global survivalDuration,numFoodEaten,distanceFromOrigin
 		self.brain = BrainX()
 		self.installed_brains = {
 			-1:BrainX,
 			0:Brain0,
 			1:Brain1,
 		}
+		survivalDuration=0
+		numFoodEaten=0
+		distanceFromOrigin=0
 	
 	def set_brain(self, brain):
-		brain=1
+		brain=0
 		self.brain_id = brain
 		if brain not in self.installed_brains:
 			raise ValueError, "Unknown brain %d" % brain
@@ -53,6 +61,23 @@ class Controller:
     
 	def learn(self, dcharge):
 		self.brain.learn(dcharge)
+
+	def process_stats(self,data):
+		global survivalDuration,numFoodEaten,distanceFromOrigin
+		survivalDuration+=1
+		if data[-2]==1: numFoodEaten+=1
+		distanceFromOrigin+=data[2][0]
+	
+	def reset(self):
+		global survivalDuration,numFoodEaten,distanceFromOrigin
+		f=open('test.txt','w')
+		f.write('survival duration: %d\n'%survivalDuration)
+		f.write('number foods eaten: %d\n'%numFoodEaten)
+		f.write('distance from center: %f\n'%distanceFromOrigin)
+		f.close()
+		survivalDuration=0
+		numFoodEaten=0
+		distanceFromOrigin=0
 
 controller = Controller()
 

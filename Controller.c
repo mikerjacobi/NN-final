@@ -124,7 +124,7 @@ void init(int graphics, int verbose_flag)
   PY(run_brain = PyString_FromString("run_brain"));
   PY(learn = PyString_FromString("learn"));
   PY(reset = PyString_FromString("reset"));
-  //PY(process_stats = PyString_FromString("process_stats"));
+  PY(process_stats = PyString_FromString("process_stats"));
   //PY(update_stats = PyString_FromString("update_stats"));
 
   PY(func_name = PyString_FromString("set_brain"));
@@ -286,9 +286,11 @@ int agents_controller( WORLD_TYPE *w )
     PY(PyList_SET_ITEM(input, arg++, Py_BuildValue("(ffff)", dfb, drl, dth, dh)));
     PY(PyList_SET_ITEM(input, arg++, PyInt_FromLong(touched)));
     PY(PyList_SET_ITEM(input, arg++, PyInt_FromLong(eaten)));
+	
     //PY(control = PyObject_CallMethodObjArgs(controller, update_stats, input, NULL));
+    PY(control = PyObject_CallMethodObjArgs(controller, process_stats,input, NULL));
     Py_DECREF(input);
-    //Py_DECREF(control);
+    Py_DECREF(control);
 
     // decrement metabolic charge by basil metabolism rate.  DO NOT REMOVE THIS CALL 
     basal_metabolism_agent( a ) ;
@@ -309,7 +311,7 @@ int agents_controller( WORLD_TYPE *w )
     strftime(timestamp, 30, "%y/%m/%d H: %H M: %M S: %S",date) ;
     printf("Death time: %s\n",timestamp) ;
     last_object = 0;
-    
+
     // Example as to how to restore the world and agent after it dies. 
     // restore all of the objects h=back into the world 
     restore_objects_to_world( Flatworld );
