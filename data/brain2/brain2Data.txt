@@ -1,0 +1,2 @@
+time,avergage Energy,survivalDuration, constant velocity
+1353128412.261744, 0.553778, 2271, 0.250000

@@ -4,7 +4,7 @@ import random
 from neuron import *
 import plotting as p
 
-class Brain1:
+class Brain2:
 	networks=[]
 	survivalDuration=0
 	energy=[]
@@ -18,27 +18,35 @@ class Brain1:
 		#initialize class vars
 		self.time=time.time()
 
-		#network for eating
-		n=Neuron(None,None,1,'food neuron','constant',0,None)
-		self.networks.append(n)
-
 		#network for moving
 		movementNeurons=[]
 		movementNeurons.append(Neuron(None,None,1,'front-back','constant',self.constantFB,None))
 		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',0,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',-.1,None))
 		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks.append(movementNeurons)		
 
+		#single eyeball network
+		eyeballs=[]
+		eta=.1
+		threshold=.9
+	
+		bias=1
+		weights=[bias,1,1,1]
+		RGB=Neuron(weights,None,eta,'eyeball','step',threshold,None)
+		eyeballs.append(RGB)
+		self.networks.append(eyeballs)
+
 	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
-		
-		#food network
-		n=self.networks[0]
+		#food network v2
+		inputVector=[1]+eye[15]
+		n=self.networks[1][0]
+		n.inputNeurons=inputVector
 		n.propagate()
 		eat=n.y
 
 		#movement network
-		moveNeurons=self.networks[1]
+		moveNeurons=self.networks[0]
 		for n in moveNeurons:
 			n.propagate()
 		fb=moveNeurons[0].y
@@ -63,12 +71,12 @@ class Brain1:
 		averageEnergy/=self.survivalDuration
 
 		#record data
-		f=open('data/brain1/brain1Data.txt','a')
+		f=open('data/brain2/brain2Data.txt','a')
 		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
 		
 		#plots
-		name='data/brain1/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		name='data/brain2/%d-%f-EvT.png'%(int(self.time),self.constantFB)
 		p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
@@ -77,11 +85,11 @@ class Brain1:
 		self.survivalDuration=0
 
 	def learn(self,dcharge):
-		#food network; note that this doesn't change the neuron
-		self.networks[0].updateWeights(None)
+		#eye network; note that this doesn't change the neuron
+		self.networks[1][0].updateWeights(dcharge)
 	
 		#movement network; doesn't change move neurons
-		for n in self.networks[1]:
+		for n in self.networks[0]:
 			n.updateWeights(None)
 		
 		return 1
