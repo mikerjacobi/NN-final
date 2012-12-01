@@ -111,6 +111,7 @@ void init(int graphics, int verbose_flag)
   add_actuators_to_agent( agent, 0.0, 0.0, 0.0, 0.0 ) ;
   set_agent_head_angle( agent, 0.0 ) ;
   set_metabolic_burn_rate_agent(agent, 5.0e-4 ) ;
+  set_movement_burn_rate_agent( agent, 5.0e-4 ) ;
   add_agent_to_world( Flatworld, agent ) ; 
   current_agent = agent ;
 

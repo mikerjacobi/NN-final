@@ -92,7 +92,7 @@ class Neuron:
 			pass
 		elif self.function=='step':
 			pass
-		else:
+		else: #this is perceptron learning...
 			scalar=(d-self.y)*self.eta
 			inputs=[]
 			for IN in self.inputNeurons: inputs.append(IN.y)

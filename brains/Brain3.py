@@ -4,7 +4,7 @@ import random
 from neuron import *
 import plotting as p
 
-class Brain2:
+class Brain3:
 	networks=[]
 	survivalDuration=0
 	energy=[]
@@ -18,33 +18,36 @@ class Brain2:
 		#initialize class vars
 		self.time=time.time()
 
-		#network for moving
+
+		#BRAIN1 network for moving
 		movementNeurons=[]
 		movementNeurons.append(Neuron(None,None,1,'front-back','constant',self.constantFB,None))
 		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',-.1,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',.55,None))
 		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks.append(movementNeurons)		
 
-		#single eyeball network
+		#BRAIN2 single eyeball network
 		eyeballs=[]
-		eta=.1
 		threshold=.9
-	
+		eta=.1
 		bias=1
 		weights=[bias,1,1,1]
 		RGB=Neuron(weights,None,eta,'eyeball','step',threshold,None)
 		eyeballs.append(RGB)
 		self.networks.append(eyeballs)
 
-	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
-		#food network v2
-		inputVector=[1]+eye[15]
-		n=self.networks[1][0]
-		n.inputNeurons=inputVector
-		n.propagate()
-		eat=n.y
+		#BRAIN3 network for sensing touch
+		touchNeuron=[]
+		threshold=0.0
+		eta=.1
+		bias=1
+		weights=[bias,1,1,1,1,1,1]
+		touch=Neuron(weights,None,eta,'touch','step',threshold,None)
+		touchNeuron.append(touch)
+		self.networks.append(touchNeuron)
 
+	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
 		#movement network
 		moveNeurons=self.networks[0]
 		for n in moveNeurons:
@@ -53,6 +56,19 @@ class Brain2:
 		lr=moveNeurons[1].y
 		br=moveNeurons[2].y
 		hr=moveNeurons[3].y
+
+		#eyeball network
+		inputVector=[1]+eye[15]
+		n=self.networks[1][0]
+		n.inputNeurons=inputVector
+		n.propagate()
+		eat=n.y
+		
+		#touch network
+		touchNeuron=self.networks[2][0]
+		touchInput=[1.0]+[touch[0][0], touch[1][0], touch[2][0], touch[3][0], touch[4][0], touch[5][0]]
+		touchNeuron.inputNeurons=touchInput
+		touchNeuron.propagate()
 
 		return eat,fb,lr,br,hr	
 
@@ -71,12 +87,12 @@ class Brain2:
 		averageEnergy/=self.survivalDuration
 
 		#record data
-		f=open('data/brain2/brain2Data.txt','a')
+		f=open('data/brain3/brain3Data.txt','a')
 		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
 		
 		#plots
-		name='data/brain2/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		#name='data/brain3/%d-%f-EvT.png'%(int(self.time),self.constantFB)
 		#p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
@@ -85,6 +101,7 @@ class Brain2:
 		self.survivalDuration=0
 
 	def learn(self,dcharge):
+		print dcharge
 		#eye network; note that this doesn't change the neuron
 		self.networks[1][0].updateWeights(dcharge)
 	
