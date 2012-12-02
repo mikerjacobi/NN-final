@@ -26,7 +26,7 @@ class Neuron:
 	inputNeurons=None
 	weights=None
 	eta=None
-	y=None
+	y=0
 	delta=None
 	bias=None
 	deltaW=None
@@ -51,6 +51,15 @@ class Neuron:
 		elif function=='step':
 			#input neurons is an input vector
 			self.threshold=a
+		elif function=='eye':	
+			pass
+		elif function=='linear-input':
+			pass
+		elif function=='product':
+			pass
+		elif function=='wta':
+			pass
+		
 
 
     #def __len__(self):
@@ -84,6 +93,26 @@ class Neuron:
 				v+=self.inputNeurons[i]*self.weights[i]
 			if v>self.threshold: self.y=1
 			else: self.y=0
+		elif self.function=='eye':
+			maxIndex=self.inputNeurons.index(max(self.inputNeurons))
+			if maxIndex==0: self.y=0
+			elif maxIndex==1: self.y=-1
+			elif maxIndex==2: self.y=1
+			else: self.y=0
+		elif self.function=='linear-input': #has an input vector instead of input neurons
+			#calculate v
+			for i in range(len(self.inputNeurons)):
+				v+=self.inputNeurons[i]*self.weights[i]
+			self.y=v
+		elif self.function=='product':#output is the product of inputs
+			v=1
+			for IN in self.inputNeurons:
+				v*=IN.y
+			self.y=v
+		elif self.function=='wta':
+			#i want to output the max input
+			#REDO THIS!!!
+			pass
 		return self.y
 
    	
@@ -92,12 +121,14 @@ class Neuron:
 			pass
 		elif self.function=='step':
 			pass
-		else: #this is perceptron learning...
+		elif 1==2: #this is perceptron learning...
 			scalar=(d-self.y)*self.eta
 			inputs=[]
 			for IN in self.inputNeurons: inputs.append(IN.y)
 			scaledInput=vMult(inputs, scalar)
 			self.weights=vAdd(self.weights,scaledInput)
+		else:
+			pass
 
 
 
