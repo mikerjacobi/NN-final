@@ -89,7 +89,6 @@ class Neuron:
 		elif self.function=='constant':
 			self.y=self.constant
 		elif self.function=='step': #inputNeurons is a float array
-			
 			for i in range(0,len(self.inputNeurons)):
 				v+=self.inputNeurons[i].y*self.weights[i]
 			if v>self.threshold: self.y=1
@@ -134,6 +133,10 @@ class Neuron:
 			for IN in self.inputNeurons:
 				v=v and IN.y
 			self.y=v
+		elif self.function=='negate':
+			v=self.inputNeurons[0]
+			if v==1:self.y=0
+			elif v==0:self.y=1
 		return self.y
 
    	

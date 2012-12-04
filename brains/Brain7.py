@@ -6,11 +6,13 @@ sys.path.append('./neurons')
 import test as t
 import plotting as p
 
-class Brain6:
+class Brain7:
 	networks={}
 	survivalDuration=0
 	energy=[]
 	time=None
+	constantFB=.25
+	constantBR=.55
 
 	def set_brain(self):
 		pass
@@ -20,12 +22,11 @@ class Brain6:
 		self.time=time.time()
 
 		#network for default motion
-		constantFB=.25
-		constantBR=.55
 		movementNeurons=[]
-		movementNeurons.append(Neuron(None,None,1,'front-back','constant',constantFB,None))
+		fbMovement=Neuron(None,None,1,'front-back','constant',self.constantFB,None)
+		movementNeurons.append(fbMovement)
 		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',constantBR,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',self.constantBR,None))
 		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks['movementNeurons']=movementNeurons
 
@@ -74,6 +75,30 @@ class Brain6:
 		touchNetwork.append(andTouchNeuron)
 		self.networks['touchNetwork']=touchNetwork
 
+		#stop motion on (e>.9 and center eye intensity>1) network
+		stopmotionNetwork=[]
+		threshold=.9#this is what energy level is being compared to
+		stepEnergy=Neuron([1],None,None,'stopmotion-step','step-input',threshold,None)
+		stepIntensity=Neuron([1],[eyeballs[15][1]],None,'stopmotion-intensity','step',1,None)#if light intensity > 1return 1; else 0
+		stopmotionNetwork.append(stepEnergy)
+		#i need to AND (with a 0) the value i get from the above neuron to get a usable value
+		constant1=Neuron(None,None,None,'stopmotion-constant1','constant',1,None)
+		stopmotionNetwork.append(constant1)
+		stopmotionNetwork.append(stepIntensity)
+		stopAnd=Neuron(None,[stepEnergy,constant1,stepIntensity],None,'stopmotion-energyboolean','and',None,None) #energy>.9 AND constant0 AND intensity>1
+		stopmotionNetwork.append(stopAnd)
+		negateNeuron=Neuron(None,None,None,'stopmotion-negate','negate',None,None)
+		stopmotionNetwork.append(negateNeuron)
+		#stopTouchAnd=Neuron([1,1],[touch,stopAnd],None,'stopmotion-stoptouchand','and',None,None)
+		stopmotionNetwork.append(Neuron(None,[negateNeuron,fbMovement],None,'stopmotion-product','product',None,None))#energy>.9 times movement
+		
+		#if i'm touching a food AND my energy is >.9; stop
+		#else; move at my normal speed
+		#seperately: if i'm moving; eat as described
+		#else don't eat
+		#so the final step function neuron in this network will be anded with the eatStepNeuron
+		self.networks['stopmotionNetwork']=stopmotionNetwork
+
 	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
 		#movement network
 		moveNeurons=self.networks['movementNeurons']
@@ -114,7 +139,7 @@ class Brain6:
 		brNeuron.propagate()
 		br=brNeuron.y
 	
-		#touch network
+		#eat network
 		touchNetwork=self.networks['touchNetwork']
 		touchNeuron=touchNetwork[0] #neuron associated with touch sensors
 		ciNeuron=touchNetwork[1]#color-intensity neuron at the center eye
@@ -126,6 +151,28 @@ class Brain6:
 		andNeuron.propagate()
 		eat=andNeuron.y
 
+		#stop motion on e>.9 network
+		#dont forget the AND touching a green
+		#i'll have a step neuron that outputs 0>.9 and 1<=.9
+		#i'll have a linear neuron that outputs the product of ^step neuron and FbmotionNeuron
+		#fb=^linearNeuron.y
+		stopmotionNetwork=self.networks['stopmotionNetwork']
+		stepEnergy=stopmotionNetwork[0]
+		constant1Neuron=stopmotionNetwork[1]
+		stepIntensity=stopmotionNetwork[2]
+		stopAndNeuron=stopmotionNetwork[3]
+		negateNeuron=stopmotionNetwork[4]
+		stopProductNeuron=stopmotionNetwork[5]
+		stepEnergy.inputNeurons=[charge]
+		stepEnergy.propagate()
+		constant1Neuron.propagate()
+		stepIntensity.propagate()
+		stopAndNeuron.propagate()
+		negateNeuron.inputNeurons=[stopAndNeuron.y]
+		negateNeuron.propagate()
+		stopProductNeuron.propagate()
+		fb=stopProductNeuron.y
+
 		return eat,fb,lr,br,hr	
 
 	def run_brain(self, args):
@@ -134,8 +181,8 @@ class Brain6:
 	def process_stats(self,data):
 		self.survivalDuration+=1
 		self.energy.append(data[0])
-		if self.survivalDuration%1000==0:
-			print 'duration:',self.survivalDuration
+		#if self.survivalDuration%1000==0:
+		#	print 'duration:',self.survivalDuration
 		
 
 	def reset(self):
@@ -146,13 +193,13 @@ class Brain6:
 		print 'lived for ',self.survivalDuration,'!!!!'
 
 		#record data
-		f=open('data/brain6/brain6Data.txt','a')
+		f=open('data/brain7/brain7Data.txt','a')
 		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
 		
 		#plots
-		name='data/brain6/%d-%f-EvT.png'%(int(self.time),self.constantFB)
-		#p.plotEnergyVsTime(self.energy,name)
+		name='data/brain7/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
 		self.time=time.time()
