@@ -26,7 +26,7 @@ class Neuron:
 	inputNeurons=None
 	weights=None
 	eta=None
-	y=0
+	y=None
 	delta=None
 	bias=None
 	deltaW=None
@@ -51,15 +51,6 @@ class Neuron:
 		elif function=='step' or 'touch':
 			#input neurons is an input vector
 			self.threshold=a
-		elif function=='eye':	
-			pass
-		elif function=='linear-input':
-			pass
-		elif function=='product':
-			pass
-		elif function=='wta':
-			pass
-		
 
 
     #def __len__(self):
@@ -89,34 +80,15 @@ class Neuron:
 		elif self.function=='constant':
 			self.y=self.constant
 		elif self.function=='step': #inputNeurons is a float array
+                    
 			for i in range(1,len(self.inputNeurons)):
 				v+=self.inputNeurons[i]*self.weights[i]
 			if v>self.threshold: self.y=1
 			else: self.y=0
-		elif self.function=='eye':
-			maxIndex=self.inputNeurons.index(max(self.inputNeurons))
-			if maxIndex==0: self.y=0
-			elif maxIndex==1: self.y=-1
-			elif maxIndex==2: self.y=1
-			else: self.y=0
-		elif self.function=='linear-input': #has an input vector instead of input neurons
-			#calculate v
-			for i in range(len(self.inputNeurons)):
-				v+=self.inputNeurons[i]*self.weights[i]
-			self.y=v
-		elif self.function=='product':#output is the product of inputs
-			v=1
-			for IN in self.inputNeurons:
-				v*=IN.y
-			self.y=v
-		elif self.function=='wta':
-			#i want to output the max input
-			#REDO THIS!!!
-			pass
 		elif self.function=='sigmoid':
 			for i in range(1,len(self.inputNeurons)):
 				v+=self.inputNeurons[i]*self.weights[i]
-			self.y=math.tanh(2*v)/10
+			self.y=math.tanh(v/2)/10
 		elif self.function=='touch': # We know when we're touching
 			#only activate if contact is made on the "face"
 			if self.inputNeurons[1] > self.threshold:
@@ -130,19 +102,18 @@ class Neuron:
 			pass
 		elif self.function=='step':
 			pass
-		elif 1==2: #this is perceptron learning...
+                
+		elif self.function=='sigmoid':
+			derivSig = (1 - self.y**2)/20
+			scalar = (d - self.y) * self.eta * derivSig
+			delta = vMult(self.inputNeurons, scalar)
+			self.weights = vAdd(self.weights,delta)
+		else: #this is perceptron learning...
 			scalar=(d-self.y)*self.eta
 			inputs=[]
 			for IN in self.inputNeurons: inputs.append(IN.y)
 			scaledInput=vMult(inputs, scalar)
 			self.weights=vAdd(self.weights,scaledInput)
-		elif self.function=='sigmoid':
-			derivSig = (1 - self.y**2)/(5)
-			scalar = (d - self.y) * self.eta * derivSig
-			delta = vMult(self.inputNeurons, scalar)
-			self.weights = vAdd(self.weights,delta)
-		else:
-			pass
 
 
 

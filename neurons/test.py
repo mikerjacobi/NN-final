@@ -20,6 +20,9 @@ def vMult(a,scalar):
         b.append(a[i]*scalar)
     return b
 
+def testfunc():
+	print 'testfunked!'
+
 
 class Neuron:
 	name=None
@@ -48,7 +51,7 @@ class Neuron:
 			self.sigma=float(b)
 		elif function=='constant':
 			self.constant=float(a)
-		elif function=='step' or 'touch':
+		elif function=='step':
 			#input neurons is an input vector
 			self.threshold=a
 		elif function=='eye':	
@@ -113,15 +116,6 @@ class Neuron:
 			#i want to output the max input
 			#REDO THIS!!!
 			pass
-		elif self.function=='sigmoid':
-			for i in range(1,len(self.inputNeurons)):
-				v+=self.inputNeurons[i]*self.weights[i]
-			self.y=math.tanh(2*v)/10
-		elif self.function=='touch': # We know when we're touching
-			#only activate if contact is made on the "face"
-			if self.inputNeurons[1] > self.threshold:
-				self.y = 1
-			else: self.y = 0
 		return self.y
 
    	
@@ -136,11 +130,6 @@ class Neuron:
 			for IN in self.inputNeurons: inputs.append(IN.y)
 			scaledInput=vMult(inputs, scalar)
 			self.weights=vAdd(self.weights,scaledInput)
-		elif self.function=='sigmoid':
-			derivSig = (1 - self.y**2)/(5)
-			scalar = (d - self.y) * self.eta * derivSig
-			delta = vMult(self.inputNeurons, scalar)
-			self.weights = vAdd(self.weights,delta)
 		else:
 			pass
 

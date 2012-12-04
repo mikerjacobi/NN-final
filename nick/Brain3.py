@@ -9,9 +9,7 @@ class Brain3:
 	survivalDuration=0
 	energy=[]
 	time=None
-	constantFB=1
-	constantBR=.55#this is to ge ta red
-	#constantBR=-.1 #this is to get a green
+	constantFB=.75
 
 	def set_brain(self):
 		pass
@@ -25,21 +23,16 @@ class Brain3:
 		movementNeurons=[]
 		movementNeurons.append(Neuron(None,None,1,'front-back','constant',self.constantFB,None))
 		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',self.constantBR,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',0,None))
 		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks.append(movementNeurons)		
 
 		#BRAIN2 single eyeball network
 		eyeballs=[]
 		threshold=.9
-		eta=.1
+		eta=0.1
 		bias=1
-	
-		#read in from text file
-		f=open('eyecolor.txt','r').read().replace(' ','').split('\n')
-		weights=f[-2][1:-1].split(',')
-		for i in range(len(weights)):
-			weights[i]=float(weights[i])
+		weights= [1,1,1,1]
 
 		RGB=Neuron(weights,None,eta,'eyeball','sigmoid',None,None)
 		eyeballs.append(RGB)
@@ -90,11 +83,6 @@ class Brain3:
 		
 
 	def reset(self):
-		#save eyeball-color weights
-		f=open('eyecolor.txt','a')
-		f.write(str(self.networks[1][0].weights)+'\n')
-		f.close()
-	
 		#calculations
 		averageEnergy=0.0
 		for e in self.energy: averageEnergy+=e
@@ -118,13 +106,9 @@ class Brain3:
 	#	print dcharge
 
 		#eye network; note that this doesn't change the neuron
-		n=self.networks[1][0]
-		#print 'error=',dcharge-n.y
-		#print n.inputNeurons
-		#print n.weights
-		n.updateWeights(dcharge)
-			
-		
+		if dcharge != 0:
+			self.networks[1][0].updateWeights(dcharge)
+
 		#movement network; doesn't change move neurons
 		for n in self.networks[0]:
 			n.updateWeights(None)

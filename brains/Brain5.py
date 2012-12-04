@@ -6,7 +6,7 @@ sys.path.append('./neurons')
 import test as t
 import plotting as p
 
-class Brain4:
+class Brain5:
 	networks=[]
 	survivalDuration=0
 	energy=[]
@@ -17,9 +17,6 @@ class Brain4:
 		pass
 
 	def __init__(self):
-		print dir(t)
-
-
 		#initialize class vars
 		self.time=time.time()
 
@@ -32,21 +29,26 @@ class Brain4:
 		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks.append(movementNeurons)		
 
-		#BRAIN4 multi eyeball network
+		#multi eyeball network
 		eyeballs=[]
 		eyeWTA=[]
-		threshold=.9
-		eta=.1
-		bias=1
-		weights=[bias,1,1,1]
+		#threshold=.9
+		#eta=.1
+		#bias=1
+		#weights=[bias,1,1,1]
+		#these weights were learned in brain3
+		#color_weights=[-0.53926540216773977, -0.96230437483509246, 0.81583336266276296, 0.50542877417595056]
+		#color_weights=[-0.00012583614648609305, -0.029357172454027771, 0.039770272613506637, 0.0010203691860378452]
+		color_weights=[0,-1,1,.01]
+		intensity_weights=[1,1,1]
 
 		#for eyeball in eyeballs:
 		for i in range(31):
-			RGB=Neuron(weights,None,eta,'eyeball-color:'+str(i),'eye',threshold,None)
-			intensity=Neuron(weights,None,eta,'eyeball-intensity'+str(i),'linear-input',None,None)
-			product=Neuron([1,1],[RGB, intensity] ,eta,'product:'+str(i),'product',None,None)
+			RGB=Neuron(color_weights,None,None,'eyeball-color:'+str(i),'sigmoid',None,None)
+			intensity=Neuron(intensity_weights,None,None,'eyeball-intensity'+str(i),'linear-input',None,None)
+			product=Neuron([1,1],[RGB, intensity] ,None,'product:'+str(i),'product',None,None)
 			eyeballs.append((RGB,intensity,product))
-			WTA=Neuron([1], [product], eta, 'WTA:'+str(i), 'linear',None,None)
+			WTA=Neuron([1], [product], None, 'WTA:'+str(i), 'linear',None,None)
 			eyeWTA.append(WTA)
 		for i in range(len(eyeWTA)):
 			wta=eyeWTA[i]
@@ -56,7 +58,7 @@ class Brain4:
 					wta.weights+=[0]
 		self.networks.append(eyeballs)
 		self.networks.append(eyeWTA)
-		lr=Neuron(range(-15,16,1),eyeWTA, eta,'lr-neuron','linear',None,None)
+		lr=Neuron(range(-15,16,1),eyeWTA, None,'lr-neuron','linear',None,None)
 		self.networks.append([lr])
 
 		#BRAIN3 network for sensing touch
@@ -83,9 +85,10 @@ class Brain4:
 		eyeballs=self.networks[1]
 		for i in range(len(eyeballs)):
 			eyeball=eyeballs[i]
-			inputVector=[0]+eye[i]
-			eyeball[0].inputNeurons=inputVector #this is the color neuron
-			eyeball[1].inputNeurons=inputVector #this is the intensity neuron
+			color_inputVector=[1]+eye[i]
+			intensity_inputVector=eye[i]
+			eyeball[0].inputNeurons=color_inputVector #this is the color neuron
+			eyeball[1].inputNeurons=intensity_inputVector #this is the intensity neuron
 			eyeball[0].propagate()
 			eyeball[1].propagate()
 			eyeball[2].propagate()#product neuron
@@ -111,14 +114,13 @@ class Brain4:
 		lrNeuron.propagate()
 		br=lrNeuron.y
 	
-		eat=1
-		
 		#touch network
 		touchNeuron=self.networks[4][0]
 		touchInput=[1.0]+[touch[0][0], touch[1][0], touch[2][0], touch[3][0], touch[4][0], touch[5][0]]
 		touchNeuron.inputNeurons=touchInput
 		touchNeuron.propagate()
-
+		eat = touchNeuron.y # The agent will try to eat when it touches something
+		
 		return eat,fb,lr,br,hr	
 
 	def run_brain(self, args):
@@ -139,12 +141,12 @@ class Brain4:
 		print 'lived for ',self.survivalDuration,'!!!!'
 
 		#record data
-		f=open('data/brain4/brain4Data.txt','a')
+		f=open('data/brain5/brain5Data.txt','a')
 		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
 		
 		#plots
-		name='data/brain4/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		name='data/brain5/%d-%f-EvT.png'%(int(self.time),self.constantFB)
 		p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
@@ -155,14 +157,14 @@ class Brain4:
 	def learn(self,dcharge):
 		#print dcharge
 		#eye network; note that this doesn't change the neuron
-		eyeballs=self.networks[1]
-		for eyeball in eyeballs:
-			eyeball[0].updateWeights(dcharge)#color
-			eyeball[1].updateWeights(dcharge)#intensity 
+		#eyeballs=self.networks[1]
+		#for eyeball in eyeballs:
+		#	eyeball[0].updateWeights(dcharge)#color
+		#	eyeball[1].updateWeights(dcharge)#intensity 
 	
 		#movement network; doesn't change move neurons
-		for n in self.networks[0]:
-			n.updateWeights(None)
+		#for n in self.networks[0]:
+		#	n.updateWeights(None)
 		
 		return 1
 
