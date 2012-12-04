@@ -20,6 +20,7 @@ from Brain2 import Brain2
 from Brain3 import Brain3
 from Brain4 import Brain4
 from Brain5 import Brain5
+from Brain6 import Brain6
 
 class Controller:
 	def __init__(self):
@@ -32,10 +33,11 @@ class Controller:
 			3:Brain3,
 			4:Brain4,
 			5:Brain5,
+			6:Brain6,
 		}
 	
 	def set_brain(self, brain):
-		brain=5
+		brain=6
 		self.brain_id = brain
 		if brain not in self.installed_brains:
 			raise ValueError, "Unknown brain %d" % brain

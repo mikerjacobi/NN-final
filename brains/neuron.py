@@ -48,7 +48,7 @@ class Neuron:
 			self.sigma=float(b)
 		elif function=='constant':
 			self.constant=float(a)
-		elif function=='step' or 'touch':
+		elif function=='step' or 'touch' or 'step-input':
 			#input neurons is an input vector
 			self.threshold=a
 		elif function=='eye':	
@@ -89,7 +89,13 @@ class Neuron:
 		elif self.function=='constant':
 			self.y=self.constant
 		elif self.function=='step': #inputNeurons is a float array
-			for i in range(1,len(self.inputNeurons)):
+			
+			for i in range(0,len(self.inputNeurons)):
+				v+=self.inputNeurons[i].y*self.weights[i]
+			if v>self.threshold: self.y=1
+			else: self.y=0
+		elif self.function=='step-input':
+			for i in range(0,len(self.inputNeurons)):
 				v+=self.inputNeurons[i]*self.weights[i]
 			if v>self.threshold: self.y=1
 			else: self.y=0
@@ -122,6 +128,12 @@ class Neuron:
 			if self.inputNeurons[1] > self.threshold:
 				self.y = 1
 			else: self.y = 0
+		elif self.function=='and':
+			#logical AND of input neuron output
+			v=1
+			for IN in self.inputNeurons:
+				v=v and IN.y
+			self.y=v
 		return self.y
 
    	
