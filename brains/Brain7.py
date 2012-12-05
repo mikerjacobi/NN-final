@@ -9,6 +9,7 @@ import plotting as p
 class Brain7:
 	networks={}
 	survivalDuration=0
+	numEaten=0
 	energy=[]
 	time=None
 	constantFB=.25
@@ -36,7 +37,7 @@ class Brain7:
 		bodyRotate=[]
 		#these weights were learned in brain3
 		#color_weights=[-0.53926540216773977, -0.96230437483509246, 0.81583336266276296, 0.50542877417595056]
-		color_weights=[0,-1,1,.01]
+		color_weights=[0,-1,1,-.01]
 		intensity_weights=[1,1,1]
 
 		#for eyeball in eyeballs:
@@ -81,7 +82,6 @@ class Brain7:
 		stepEnergy=Neuron([1],None,None,'stopmotion-step','step-input',threshold,None)
 		stepIntensity=Neuron([1],[eyeballs[15][1]],None,'stopmotion-intensity','step',1,None)#if light intensity > 1return 1; else 0
 		stopmotionNetwork.append(stepEnergy)
-		#i need to AND (with a 0) the value i get from the above neuron to get a usable value
 		constant1=Neuron(None,None,None,'stopmotion-constant1','constant',1,None)
 		stopmotionNetwork.append(constant1)
 		stopmotionNetwork.append(stepIntensity)
@@ -89,14 +89,7 @@ class Brain7:
 		stopmotionNetwork.append(stopAnd)
 		negateNeuron=Neuron(None,None,None,'stopmotion-negate','negate',None,None)
 		stopmotionNetwork.append(negateNeuron)
-		#stopTouchAnd=Neuron([1,1],[touch,stopAnd],None,'stopmotion-stoptouchand','and',None,None)
 		stopmotionNetwork.append(Neuron(None,[negateNeuron,fbMovement],None,'stopmotion-product','product',None,None))#energy>.9 times movement
-		
-		#if i'm touching a food AND my energy is >.9; stop
-		#else; move at my normal speed
-		#seperately: if i'm moving; eat as described
-		#else don't eat
-		#so the final step function neuron in this network will be anded with the eatStepNeuron
 		self.networks['stopmotionNetwork']=stopmotionNetwork
 
 	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
@@ -152,10 +145,6 @@ class Brain7:
 		eat=andNeuron.y
 
 		#stop motion on e>.9 network
-		#dont forget the AND touching a green
-		#i'll have a step neuron that outputs 0>.9 and 1<=.9
-		#i'll have a linear neuron that outputs the product of ^step neuron and FbmotionNeuron
-		#fb=^linearNeuron.y
 		stopmotionNetwork=self.networks['stopmotionNetwork']
 		stepEnergy=stopmotionNetwork[0]
 		constant1Neuron=stopmotionNetwork[1]
@@ -181,8 +170,7 @@ class Brain7:
 	def process_stats(self,data):
 		self.survivalDuration+=1
 		self.energy.append(data[0])
-		#if self.survivalDuration%1000==0:
-		#	print 'duration:',self.survivalDuration
+		self.numEaten+=data[-1]
 		
 
 	def reset(self):
@@ -194,7 +182,7 @@ class Brain7:
 
 		#record data
 		f=open('data/brain7/brain7Data.txt','a')
-		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
+		f.write('%f, %f, %d, %f, %d\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB, self.numEaten))
 		f.close()
 		
 		#plots
@@ -205,6 +193,7 @@ class Brain7:
 		self.time=time.time()
 		self.energy=[]
 		self.survivalDuration=0
+		self.numEaten=0
 
 	def learn(self,dcharge):
 		#print dcharge

@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 {
 	init(0,0);
     int t;
-  	for( t=0 ; t<100000 ; t++ )
+  	for( t=0 ; t<3000000 ; t++ )
   	{
     	agents_controller( Flatworld ) ;
     	simtime++ ;
