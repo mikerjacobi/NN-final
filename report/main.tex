@@ -1,0 +1,70 @@
+\documentclass[12pt]{article} 
+\usepackage{epsfig,graphicx,color,url,verbatim}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{subfig}
+\usepackage[countmax]{subfloat}
+\usepackage{parskip}
+\setlength{\parindent}{.25in}
+\captionsetup{justification=centering}
+\usepackage{setspace}
+\onehalfspacing
+\geometry{margin=1.0in}
+
+\title{{\bf I DON'T KNOW WHAT TO NAME IT BUT WE SHOULD NAME IT SOMETHING}}
+
+\author{Mike Jacobi, Nick Aase\\
+University of New Mexico: Dept. of Computer Science\\
+\normalsize  mikerjacobi@gmail.com \& aase@unm.edu}
+
+\date{}
+
+\begin{document}
+\begin{sloppypar}
+
+\maketitle
+
+\renewcommand{\abstractname}{\Large Abstract}
+\begin{abstract}
+  \begin{singlespace}
+  ($< 200$ words)
+  \normalsize The abstract is in the file \texttt{main.tex}. His sections 
+  are just suggestions, so I used them as default. Some reminders from his 
+  spec doc:\\
+
+\begin{itemize}
+  \item
+    Every figure and table MUST have a numbered caption that defines all 
+    symbolism, and reference any sources.
+
+  \item
+    Number every equation to the justified right and define every symbol in 
+    the paragraph immediately after the equation without indentation.\\
+
+\end{itemize}
+
+  Also, I tend to manually terminate my lines to somewhere less than 80
+  columns. You don't have to, but it doesn't change the final appearence
+  of the pdf, I just find it easier to read.
+
+  \end{singlespace}
+\end{abstract}
+
+\input{Introduction.tex}
+\input{Approach.tex}
+\input{Results.tex}
+\input{Discussion.tex}
+\input{Summary.tex}
+\input{Ack.tex}
+\input{Appendix.tex}
+
+\end{sloppypar}
+
+\begin{thebibliography}{9}
+
+\bibitem{Anders}
+  Anders, Torsten, and Eduardo R. Miranda. ``Constraint Programming Systems for Modeling Music Theories and Composition.'' \underline{ACM Computing Surveys} 43.4 (2011): 1:38.
+
+\end{thebibliography}
+
+\end{document}
