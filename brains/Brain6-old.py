@@ -6,34 +6,27 @@ sys.path.append('./neurons')
 import test as t
 import plotting as p
 
-class Brain7:
-	name='brain7'
+class Brain6:
 	networks={}
-	numTimesteps=0
-	healthEaten=0
-	neutralEaten=0
-	poisonEaten=0
-	totalRotation=0
-	distanceTraveled=0
+	survivalDuration=0
 	energy=[]
-	startTime=0
-	constantFB=.25
-	constantBR=.55
+	time=None
 
 	def set_brain(self):
 		pass
 
 	def __init__(self):
 		#initialize class vars
-		self.startTime=time.time()
+		self.time=time.time()
 
 		#network for default motion
+		constantFB=.25
+		constantBR=.55
 		movementNeurons=[]
-		fbMovement=Neuron([1],None,1,'front-back','constant',self.constantFB,None)
-		movementNeurons.append(fbMovement)
-		movementNeurons.append(Neuron([1],None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron([1],None,1,'body-rotate','constant',self.constantBR,None))
-		movementNeurons.append(Neuron([1],None,1,'head-rotate','constant',0,None))
+		movementNeurons.append(Neuron(None,None,1,'front-back','constant',constantFB,None))
+		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',constantBR,None))
+		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks['movementNeurons']=movementNeurons
 
 		#multi eyeball network
@@ -42,7 +35,7 @@ class Brain7:
 		bodyRotate=[]
 		#these weights were learned in brain3
 		#color_weights=[-0.53926540216773977, -0.96230437483509246, 0.81583336266276296, 0.50542877417595056]
-		color_weights=[0,-1,1,-.01]
+		color_weights=[0,-1,1,.01]
 		intensity_weights=[1,1,1]
 
 		#for eyeball in eyeballs:
@@ -80,22 +73,6 @@ class Brain7:
 		andTouchNeuron=Neuron([1,1],[touch,colorIntensity],None,'andTouchNeuron','and',None,None)
 		touchNetwork.append(andTouchNeuron)
 		self.networks['touchNetwork']=touchNetwork
-
-		#stop motion on (e>.9 and center eye intensity>1) network
-		stopmotionNetwork=[]
-		threshold=.9#this is what energy level is being compared to
-		stepEnergy=Neuron([1],None,None,'stopmotion-step','step-input',threshold,None)
-		stepIntensity=Neuron([1],[eyeballs[15][1]],None,'stopmotion-intensity','step',1,None)#if light intensity > 1return 1; else 0
-		stopmotionNetwork.append(stepEnergy)
-		constant1=Neuron([1],None,None,'stopmotion-constant1','constant',1,None)
-		stopmotionNetwork.append(constant1)
-		stopmotionNetwork.append(stepIntensity)
-		stopAnd=Neuron([1,1,1],[stepEnergy,constant1,stepIntensity],None,'stopmotion-energyboolean','and',None,None) #energy>.9 AND constant0 AND intensity>1
-		stopmotionNetwork.append(stopAnd)
-		negateNeuron=Neuron([1],None,None,'stopmotion-negate','negate',None,None)
-		stopmotionNetwork.append(negateNeuron)
-		stopmotionNetwork.append(Neuron([1,1],[negateNeuron,fbMovement],None,'stopmotion-product','product',None,None))#energy>.9 times movement
-		self.networks['stopmotionNetwork']=stopmotionNetwork
 
 	def run(self,charge,touch,eye,ear0,ear1,actuators,headangle):
 		#movement network
@@ -137,7 +114,7 @@ class Brain7:
 		brNeuron.propagate()
 		br=brNeuron.y
 	
-		#eat network
+		#touch network
 		touchNetwork=self.networks['touchNetwork']
 		touchNeuron=touchNetwork[0] #neuron associated with touch sensors
 		ciNeuron=touchNetwork[1]#color-intensity neuron at the center eye
@@ -149,77 +126,59 @@ class Brain7:
 		andNeuron.propagate()
 		eat=andNeuron.y
 
-		#stop motion on e>.9 network
-		stopmotionNetwork=self.networks['stopmotionNetwork']
-		stepEnergy=stopmotionNetwork[0]
-		constant1Neuron=stopmotionNetwork[1]
-		stepIntensity=stopmotionNetwork[2]
-		stopAndNeuron=stopmotionNetwork[3]
-		negateNeuron=stopmotionNetwork[4]
-		stopProductNeuron=stopmotionNetwork[5]
-		stepEnergy.inputNeurons=[charge]
-		stepEnergy.propagate()
-		constant1Neuron.propagate()
-		stepIntensity.propagate()
-		stopAndNeuron.propagate()
-		negateNeuron.inputNeurons=[stopAndNeuron.y]
-		negateNeuron.propagate()
-		stopProductNeuron.propagate()
-		fb=stopProductNeuron.y
-
 		return eat,fb,lr,br,hr	
 
+	def run_brain(self, args):
+		pass	
+	
 	def process_stats(self,data):
-		self.numTimesteps+=1
+		self.survivalDuration+=1
 		self.energy.append(data[0])
-		if data[-1]>0: 
-			if data[1]>0: self.healthEaten+=data[-1]
-			elif data[1]<0: self.poisonEaten+=data[-1]
-			else: self.neutralEaten+=data[-1]
-		self.totalRotation+=abs(data[2][2])#rotation
-		self.distanceTraveled+=abs(data[2][0])#distance this timestep
+		if self.survivalDuration%1000==0:
+			print 'duration:',self.survivalDuration
 		
 
 	def reset(self):
 		#calculations
-		survivalTime=time.time()-self.startTime
-
 		averageEnergy=0.0
 		for e in self.energy: averageEnergy+=e
-		averageEnergy/=self.numTimesteps
+		averageEnergy/=self.survivalDuration
+		print 'lived for ',self.survivalDuration,'!!!!'
 
-		#neuron stats
-		numNeurons,numConnections,numNetworks=0,0,0
-		for network in self.networks.keys():
-			numNetworks+=1
-			for neuron in self.networks[network]:
-				if network=='eyeballs':
-					numNeurons+=3 #color,intensity,product neurons
-					numConnections+=9 #4inputs,3inputs,2inputs respectively^^^
-				else:
-					numNeurons+=1
-					numConnections+=len(neuron.weights)
-	
 		#record data
-		f=open('data/%s/%sdata.txt'%(self.name,self.name),'a')
-		info='%d,%d,%d,%f,%f,%d,%d,%d,%d,%d,%d,%d,%d\n'%(self.startTime,survivalTime,self.numTimesteps,averageEnergy,self.constantFB,self.healthEaten,self.neutralEaten,self.poisonEaten,self.totalRotation,self.distanceTraveled,numConnections,numNeurons,numNetworks)
-		f.write(info)
-		print info
+		f=open('data/brain6/brain6Data.txt','a')
+		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
 		
 		#plots
-		plotname='data/%s/%d-%f-EvT.png'%(self.name,self.startTime,self.constantFB)
-		#p.plotEnergyVsTime(self.energy,plotname)
+		name='data/brain6/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		#p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
-		self.startTime=time.time()
+		self.time=time.time()
 		self.energy=[]
-		self.numTimesteps=0
-		self.healthEaten,self.poisonEaten,self.neutralEaten=0,0,0
-		self.totalRotation,self.distanceTraveled=0,0
+		self.survivalDuration=0
 
 	def learn(self,dcharge):
+		#print dcharge
+		#eye network; note that this doesn't change the neuron
+		#eyeballs=self.networks[1]
+		#for eyeball in eyeballs:
+		#	eyeball[0].updateWeights(dcharge)#color
+		#	eyeball[1].updateWeights(dcharge)#intensity 
+	
+		#movement network; doesn't change move neurons
+		#for n in self.networks[0]:
+		#	n.updateWeights(None)
+		
 		return 1
+
+
+
+
+
+
+
 
 
 

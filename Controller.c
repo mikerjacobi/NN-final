@@ -147,7 +147,7 @@ void init(int graphics, int verbose_flag)
   now = time(NULL) ;
   date = localtime( &now ) ;
   strftime(timestamp, 30, "%y/%m/%d H: %H M: %M S: %S",date) ;
-  printf("Start time: %s\n",timestamp) ;
+  //printf("Start time: %s\n",timestamp) ;
 }
 
 void cleanup(){
@@ -310,7 +310,7 @@ int agents_controller( WORLD_TYPE *w )
     now = time(NULL) ;
     date = localtime( &now ) ;
     strftime(timestamp, 30, "%y/%m/%d H: %H M: %M S: %S",date) ;
-    printf("Death time: %s\n",timestamp) ;
+    //printf("Death time: %s\n",timestamp) ;
     last_object = 0;
 
     // Example as to how to restore the world and agent after it dies. 

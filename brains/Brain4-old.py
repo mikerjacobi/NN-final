@@ -7,33 +7,29 @@ import test as t
 import plotting as p
 
 class Brain4:
-	name='brain4'
 	networks=[]
-	numTimesteps=0
-	healthEaten=0
-	neutralEaten=0
-	poisonEaten=0
-	totalRotation=0
-	distanceTraveled=0
+	survivalDuration=0
 	energy=[]
-	startTime=0
+	time=None
 	constantFB=.25
-	constantBR=.55
 
 	def set_brain(self):
 		pass
 
 	def __init__(self):
+		print dir(t)
+
+
 		#initialize class vars
-		self.startTime=time.time()
+		self.time=time.time()
 
 
 		#BRAIN1 network for moving
 		movementNeurons=[]
-		movementNeurons.append(Neuron([1],None,1,'front-back','constant',self.constantFB,None))
-		movementNeurons.append(Neuron([1],None,1,'left-right','constant',0,None))
-		movementNeurons.append(Neuron([1],None,1,'body-rotate','constant',self.constantBR,None))
-		movementNeurons.append(Neuron([1],None,1,'head-rotate','constant',0,None))
+		movementNeurons.append(Neuron(None,None,1,'front-back','constant',self.constantFB,None))
+		movementNeurons.append(Neuron(None,None,1,'left-right','constant',0,None))
+		movementNeurons.append(Neuron(None,None,1,'body-rotate','constant',.55,None))
+		movementNeurons.append(Neuron(None,None,1,'head-rotate','constant',0,None))
 		self.networks.append(movementNeurons)		
 
 		#BRAIN4 multi eyeball network
@@ -69,7 +65,7 @@ class Brain4:
 		eta=.1
 		bias=1
 		weights=[bias,1,1,1,1,1,1]
-		touch=Neuron(weights,None,eta,'touch','step-input',threshold,None)
+		touch=Neuron(weights,None,eta,'touch','step',threshold,None)
 		touchNeuron.append(touch)
 		self.networks.append(touchNeuron)
 
@@ -125,54 +121,37 @@ class Brain4:
 
 		return eat,fb,lr,br,hr	
 
+	def run_brain(self, args):
+		pass	
+	
 	def process_stats(self,data):
-		self.numTimesteps+=1
+		self.survivalDuration+=1
 		self.energy.append(data[0])
-		if data[-1]>0:
-			if data[1]>0: self.healthEaten+=data[-1]
-			elif data[1]<0: self.poisonEaten+=data[-1]
-			else: self.neutralEaten+=data[-1]
-		self.totalRotation+=abs(data[2][2])#rotation
-		self.distanceTraveled+=abs(data[2][0])#distance this timestep
+		if self.survivalDuration%1000==0:
+			print 'duration:',self.survivalDuration
 		
 
 	def reset(self):
 		#calculations
-		survivalTime=time.time()-self.startTime
 		averageEnergy=0.0
 		for e in self.energy: averageEnergy+=e
-		averageEnergy/=self.numTimesteps
+		averageEnergy/=self.survivalDuration
+		print 'lived for ',self.survivalDuration,'!!!!'
 
-		#neuron stats
-		numNeurons,numConnections,numNetworks=0,0,0
-		for network in self.networks:
-			numNetworks+=1
-			for neuron in network:
-				if type(neuron)==tuple:
-					numNeurons+=3 #color,intensity,product neurons
-					numConnections+=9 #4inputs,3inputs,2inputs respectively^^^
-				else:
-					numNeurons+=1
-					numConnections+=len(neuron.weights)
-        
 		#record data
-		f=open('data/%s/%sdata.txt'%(self.name,self.name),'a')
-		info='%d,%d,%d,%f,%f,%d,%d,%d,%d,%d,%d,%d,%d\n'%(self.startTime,survivalTime,self.numTimesteps,averageEnergy,self.constantFB,self.healthEaten,self.neutralEaten,self.poisonEaten,self.totalRotation,self.distanceTraveled,numConnections,numNeurons,numNetworks)
-		f.write(info)
-		print info
+		f=open('data/brain4/brain4Data.txt','a')
+		f.write('%f, %f, %d, %f\n'%(self.time, averageEnergy, self.survivalDuration, self.constantFB))
 		f.close()
-
+		
 		#plots
-		plotname='data/%s/%d-%f-EvT.png'%(self.name,self.startTime,self.constantFB)
-		#p.plotEnergyVsTime(self.energy,plotname)
+		name='data/brain4/%d-%f-EvT.png'%(int(self.time),self.constantFB)
+		p.plotEnergyVsTime(self.energy,name)
 
 		#reset class vars
-		self.startTime=time.time()
+		self.time=time.time()
 		self.energy=[]
-		self.numTimesteps=0
-		self.healthEaten,self.poisonEaten,self.neutralEaten=0,0,0
-		self.totalRotation,self.distanceTraveled=0,0
-		
+		self.survivalDuration=0
+
 	def learn(self,dcharge):
 		#print dcharge
 		#eye network; note that this doesn't change the neuron

@@ -39,7 +39,7 @@ class Controller:
 		}
 	
 	def set_brain(self, brain):
-		brain=7
+		brain=0
 		self.brain_id = brain
 		if brain not in self.installed_brains:
 			raise ValueError, "Unknown brain %d" % brain
