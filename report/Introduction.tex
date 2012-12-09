@@ -1,27 +1,89 @@
 \section{Introduction} \label{sec:Introduction}
 
-(all major section headings 14 point, bold, numbered.  All others are 12 point, underlined.)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% start broad then focus
+%%
+%% what is the general area you are studying 
+%%
+%% what is the specific area 
+%%
+%% what is the problem you are addressing
+%%
+%% what have others done (references) (NA: shit... references? what the
+%% hell references do we need? Eeep!! The bibliography section is in
+%% \texttt{main.tex}).
+%%
+%% why is this not enough or incomplete
+%%
+%% what follows in this paper
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-we cite shit via\cite{Anders}
 
-\begin{itemize}
-  \item
-    start broad then focus
-  \item
-    what is the general area you are studying 
-  \item
-    what is the specific area 
-  \item
-    what is the problem you are addressing
-  \item
-    what have others done (references) (NA: shit... references? what the
-    hell references do we need? Eeep!! The bibliography section is in
-    \texttt{main.tex}).
-  \item
-    why is this not enough or incomplete
-  \item
-    what follows in this paper
-\end{itemize}
+\subsection{Flatworld}
+Flatworld is a two-dimensional realm populated with consumable objects
+and agents who rely on them for sustenance. Depending on which object
+an agent consumes, it will give it a boost of energy, drain its energy,
+or cause no change. The agents have their own metabolism, and without any food
+source it will eventually die.
 
-\subsection{This is a subection}
-foo.
+There are 200 instances of each object, making for 600 total. Each object type
+has a distinct color (and sound) associated with it: a food object is green, 
+poison is red, and a placebo object is blue. All objects radiate a brightness 
+as well, although that brightness is not unique between object types. Sound 
+has no reverberatory behavior and passes through all objects.
+
+Flatworld is instantiated with a default distribution of objects and agent
+placement for the first run. Upon the agent's death, all object and agent
+placement is randomized from the same distribution. This allows for a user
+to assume one consistent run for troubleshooting, and subsequent random
+runs for data collection.
+
+
+\subsection{The Agent}
+The agent is the entity in which we are inserting our brains. It has a range
+of data available to it. Among these are data from the agent's somatic
+sensors, which are represented by an 8-element array that describe the agent's
+contact with objects in Flatworld; 31 eyelets each return color (as an RGB 
+array) and brightness/intensity information; the metabolic sensor, which
+is a float between 0 and 1 (and between life and death); and hearing, which
+includes sound ``type'' and intensity.
+
+The agent also uses multiple actuators, most important of which are moving 
+and eating. We can control its forward and backward motion and its angle.
+The eating actuator, when used, only has an effect when there is a collision
+between the agent and an object in Flatworld. The agent is also capable of
+turning its head, but for the purpose of our experiments we ignored that 
+feature.
+
+
+\subsection{So What's the Problem??}
+Our goal is to keep the agent alive for as long as possible in Flatworld.
+In order to do so, it must be able to process and interact with its environment
+as efficiently as possible. Wasted movement, eating poison, and going off
+the map are all detrimental to the agent's longevity. Similarly, staying
+within range of food and consuming it keeps the little guy kicking.
+
+The hardest thing about keeping an agent alive is that the conventional 
+programming paradigms are difficult to implement. Traditional procedural and 
+object oriented programming operate relatively linearly. For many problems, 
+such approaches work quite well. Similarly, declarative programming uses rules, 
+yesses, and noes to logically designate data flow and find goals.
+
+Our problem in Flatworld is that it is a very open-ended environment, and a
+very open-ended goal. Because of this, strict procedural programming has
+to account for a multitude of caveats -- relatively unique and complicated
+situations which constantly present themselves. Furthermore, it is a large 
+searchspace to consider for declarative methods, and the notion of 
+\emph{survival} as a goal is not as tangible a concept as, say, moving to a 
+particular x-y coordinate. Thus from a declarative perspective, there are 
+many more ``maybes'' than yesses and noes.
+
+
+\subsection{What's to Follow}
+From here we shall discuss our methodology (both the analytical and physical 
+implementation of it), as well as our reasoning as to \emph{why} we designed
+our agent's brains the way we did. After that we will present our empirical
+results from the series of runs we had. Following that technical presentation,
+we will discuss our results, and reflect upon the project as a whole. Finally
+we will summarize the project, us, and the sort of ground work this project
+has laid for future work.
