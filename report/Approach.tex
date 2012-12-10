@@ -29,7 +29,7 @@ we will explain what data we collected and why we believed they were important.
 
 \subsubsection{Traditional Procedural Programming}
 Consider a stream or river. (Disclaimer: this is a massive simplification of
-one of natures most majestic features.) Despite potentially massive deluges, 
+one of nature's most majestic features.) Despite potentially massive deluges, 
 the model is still fairly predictable: water starts at the source and flows 
 down to the mouth. If we use the analogy of the water in a river being data 
 flow in a program, we can say that if the water reaches the river delta, it
@@ -75,12 +75,12 @@ paradigm, and specifically implementing first order predicate logic.
 Equation \eqref{eq:logic1}, like the code above, describes whether or 
 not to eat an object. If \eqref{eq:logic1} evaluates as $True$, then the agent 
 will be told to eat the object. Now we have introduced other problems! For 
-instance, we have the set $Food$ to initially populate \emph{and} parse 
-through every time the agent considers an object. 
+instance, we must populate $Food$ \emph{and} parse 
+through it every time the agent considers an object. 
 
 \subsubsection{As if it Wasn't Bad Enough Already...}
 These two approaches have already proven to be ineffective in accomplishing
-our goal, but then we must enforce a particularly harsh constraint: 
+our goal, but then we must enforce a particularly harsh and realistic constraint: 
 \textbf{there is no oracle in Flatworld}. That is, the agent must acquire
 important knowledge on its own. Object distance and type are not simply
 dictated to the agent.\footnote{Although later we shall reveal that we did
@@ -100,12 +100,13 @@ rigid conditional structure, however, we programmed our agent's brains to
 be able to adjust themselves based upon the situations the agent encounters.
 
 \subsection{Our Implementation}
-{\Large NEA: AM I COVERING ALL THE BASES?}
 For all of our runs we used a shim\footnote{See section~\ref{sec:Ack}.} that 
-sat between the original C code and our Python code. This served two purposes:
-since we already had a functional object to describe neurons in Python we could
+sat between Flatworld's C code and our Python code. This served two purposes:
+since we already had a working object to describe neurons in Python we could
 recycle it for this project; that, and we only had to compile the C code once.
+This was possible because the shim was compiled with a set of hard-coded
+python function calls. So to modify the behavior of a brain, we
+only needed to change the python code called by the shim.
 Given the number of minute changes we made to each incarnation of our brains,
-avoiding recompiling every time allowed for immediate gratification (or 
-disappointment) on our part.
+avoiding recompiling every time allowed for immediate results.
 

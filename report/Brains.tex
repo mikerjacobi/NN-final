@@ -12,9 +12,8 @@ it dies. It shuns all of its inputs, and uses none of its actuators.
 
 \subsection{Brain 1}
 
-Our second brain (fig. \ref{fig:brain1}) constantly activates the agent's 
-eating actuator (i.e. the agent will try to eat anything with which it comes
-in contact). It also moves in a straight line.
+Brain 1 (fig. \ref{fig:brain1}) moves in a straight line and constantly 
+activates the agent's eating actuator (i.e. the agent will try to eat anything).
 
 \begin{figure}
 \begin{center}
@@ -47,7 +46,7 @@ change, then the brightness threshold is increased.
 
 \subsection{Brain 3}
 
-For our fourth brain, we actually made two changes. The first was to the
+For Brain 4, we actually made two changes. The first was to the
 eye neuron, which we changed from a step function to a sigmoid 
 (fig. \ref{fig:brain3eye}):
 
@@ -57,11 +56,12 @@ eye neuron, which we changed from a step function to a sigmoid
 
 We made this change because we wanted this model to focus on color. Whereas
 our old step function classified \emph{all} objects as ``close enough'' vs. 
-``not close enough,'' this new version looked could classify the input by 
-consuming it, comparing the output to the change in energy. Since this change 
+``not close enough,'' this new version could classify the color of an object by 
+consuming it and comparing the output to the change in energy. Since this 
+change 
 can only be -0.1, 0, or 0.1, we selected a sigmoid function that would return 
-a value within that range. Using a continuous function like \eqref{eq:eyesig} 
-allows us to compare colors of objects.
+a value within that range. Using a continuous function like equation 
+\eqref{eq:eyesig} allows us to compare colors of objects.
 
 \begin{figure}
 \begin{center}
@@ -88,7 +88,8 @@ gnashing its teeth at every time step.
 
 Our mission for Brain 4 was to implement the eyelets into a
 winner-take-all network (fig. \ref{fig:brain4}). Each eyelet input is fed 
-into two neurons: one step function to determine green/not green, and another 
+into two neurons: one \textb{step function} to determine green/not green, and 
+another 
 which produced the linear summation of each color's intensity. The product of 
 these two neurons' outputs is then fed into a 31-element WTA network. All 
 neurons in this network connect to a single neuron that controls the rotation 
