@@ -19,7 +19,7 @@
 %%     analysis to be done on data
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this section we will first present reasons \emph{why} the afforementioned
+In this section we will first present reasons \emph{why} the aforementioned
 programming methods will not work well, followed by motivation to use the
 methods we did. After these rather nebulous postulations, we will discuss
 \emph{our} particular implementation, starting from the ground up. Finally
@@ -30,10 +30,10 @@ we will explain what data we collected and why we believed they were important.
 \subsubsection{Traditional Procedural Programming}
 Consider a stream or river. (Disclaimer: this is a massive simplification of
 one of natures most majestic features.) Despite potentially massive deluges, 
-the model is still fairly predictible: water starts at the source and flows 
+the model is still fairly predictable: water starts at the source and flows 
 down to the mouth. If we use the analogy of the water in a river being data 
 flow in a program, we can say that if the water reaches the river delta, it
-has sucessfully arrived at its goal.
+has successfully arrived at its goal.
 
 But what of lakes and seas? There is still current in the water, but when
 can one say that it has reached its ``goal?'' Where did it start in the first
@@ -42,7 +42,7 @@ place?
 Likewise, when has our agent reached its goal? Perhaps we could say it is 
 when the agent has consumed all the food in Flatworld, but was the agent 
 efficient in doing so? Let us consider the potential program flow that
-would be required for modelling an agent's simple decision whether to eat one
+would be required for modeling an agent's simple decision whether to eat one
 object it sees compared with another:
 
 \begin{verbatim}
@@ -104,49 +104,8 @@ be able to adjust themselves based upon the situations the agent encounters.
 For all of our runs we used a shim\footnote{See section~\ref{sec:Ack}.} that 
 sat between the original C code and our Python code. This served two purposes:
 since we already had a functional object to describe neurons in Python we could
-recycle it for this project; that and we only had to compile the C code once.
+recycle it for this project; that, and we only had to compile the C code once.
 Given the number of minute changes we made to each incarnation of our brains,
 avoiding recompiling every time allowed for immediate gratification (or 
 disappointment) on our part.
 
- Our next goal was to create an agent who
-would move blindly and devour any food/poison/placebo objects in its path.
-As we improved its capabilities, the agent started to descriminate between 
-helpful and detrimental objects, and ultimately it would only consume food 
-objects when it was in need of food (i.e. it will not be a gluttonous agent).
-
-\subsection{Brain Design}
-
-\subsubsection{Brain 0}
-We started from the most simplistic of models: an agent who sat in place until
-it died. There is not much more to say about this model, other than it shunned
-all of its inputs, and used none of its functions.
-
-\begin{figure}
-\begin{center}
-  \includegraphics[scale=.3]{img/brain1.png}
-  \caption{Active neurons in Brain 1}
-  \label{fig:brain1}
-\end{center}
-\end{figure}
-
-\subsubsection{Brain 1}
-
-Our second brain (Fig. \ref{fig:brain1}) constantly activates the agent's 
-eating actuator (i.e. the agent will try to eat anything with which it comes
-in contact.
-
-\subsubsection{Brain 2}
-
-Brain 2 was the first neural network to take advantage of the agent's visual
-cortex (Fig. \ref{fig:brain2}). Of the 31 eyelets available to the agent, it 
-used only the data it received from it's center eyelet (eyelet 15).
-
-
-\begin{figure}
-\begin{center}
-  \includegraphics[scale=.3]{img/brain2.png}
-  \caption{Brain 2's visual neuron}
-  \label{fig:brain2}
-\end{center}
-\end{figure}
