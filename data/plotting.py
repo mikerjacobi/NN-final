@@ -77,8 +77,6 @@ def plotTwoVar(x,y,labels,xlab,ylab,colors,name,location):
 			p.plot(x[i],y[i],label=labels[i],color=colors[i])
 
 
-	if len(x)<3:
-		p.xlim((0,4000))
 	p.xlabel(xlab)
 	p.ylabel(ylab)
 	p.title(name.split('/')[-1])
@@ -104,7 +102,7 @@ def standardDeviation(x):
 	stddev=0
 	for i in range(numVals):
 		stddev+=(mean-x[i])**2
-	stddev=math.sqrt(float(stddev)/numVals)
+	stddev=round(math.sqrt(float(stddev)/numVals),2)
 	return stddev
 
 def plotSurvivalGaussian(brain,bucketSize):
@@ -124,9 +122,19 @@ def plotSurvivalGaussian(brain,bucketSize):
 	x.append(currX)
 	y.append(currY)
 	stddev=standardDeviation(currX)
-	labels.append('sigma='+str(stddev))
 
-	plotTwoVar(x,y,labels,'Survival Duration Bucket','Number of Occurences',None,brain+'/survivalGauss', 'upper left')
+	#plotTwoVar(x,y,labels,'Survival Duration Bucket','Epoch Count',None,brain+'/survivalGauss-'+str(stddev), 'upper left')
+
+	
+	p.clf()
+	for i in range(len(x)):
+		p.plot(x[i],y[i])
+
+	p.xlabel('Survival Duration Bucket')
+	p.ylabel('Epoch Count')
+	p.title('Survival Duration Distribution')
+	#p.legend(loc='upper left')
+	p.savefig(brain+'/survivalGauss-'+str(stddev)+'.png')
 
 def plotAvgEnergyGaussian(brain,roundoff):
 	f=open(brain+'/'+brain+'data.txt','r').read().split('\n')[0:-1]
@@ -151,13 +159,13 @@ def plotAvgEnergyGaussian(brain,roundoff):
 
 	p.clf()
 	#ax=p.axes()
-	p.plot(currX,currY,label='sigma='+str(stddev))
+	p.plot(currX,currY)
    	p.xlim((0,1)) 
-	p.ylabel('Number of Epochs with a Given Average Energy')
+	p.ylabel('Epoch Count')
 	p.xlabel('Average Energy throughout Epoch Life')
 	p.title('Average Energy per Epoch Distrubtion')
-	p.legend(loc='upper left')
-	p.savefig(brain+'/avgenergyGauss'+'.png')
+	#p.legend(loc='upper left')
+	p.savefig(brain+'/avgenergyGauss-'+str(stddev)+'.png')
 
 
 def plotHPNgauss(brain):
@@ -189,20 +197,37 @@ def plotHPNgauss(brain):
 	healthSD=str(standardDeviation(healthX))
 	neutralSD=str(standardDeviation(neutralX))
 	poisonSD=str(standardDeviation(poisonX))
-	s='sigma='
-	labels=[s+healthSD,s+neutralSD,s+poisonSD]
+	sdString="h%s-n%s-p%s"%(healthSD,neutralSD,poisonSD)
+	#s='sigma='
+	#labels=[s+healthSD,s+neutralSD,s+poisonSD]
+	labels=['health','neutral','poison']
 	colors=['green','blue','red']
-	plotTwoVar(x,y,labels,'Food Items Eaten','Number of Occurences',colors,brain+'/foodGauss','upper right')
+	
+	#plot	
+	p.clf()
+	for i in range(len(x)):
+		p.plot(x[i],y[i],label=labels[i],color=colors[i])
+	p.xlabel('Food Items Eaten')
+	p.ylabel('Epoch Count')
+	p.title('Food Eaten Distribution')
+	p.legend(loc='upper right')
+	p.savefig(brain+'/foodGauss-'+sdString+'.png')
 
-def barVar(variable,ylabel,name,filename):
+def barVar(variable,ylabel,name,filename,c):
 	#open up each data file
 	means=[]
+	stddevs=[]
 	brains=[]
 	for i in range(8): brains.append('brain'+str(i))
 	for brain in brains:
 		f=open(brain+'/'+brain+'data.txt','r').read().split('\n')[:-1]
 		currMean=0
-		for i in range(len(f)): currMean+=float(f[i].split(',')[variable])
+		currData=[]
+		for i in range(len(f)): 
+			currValue=float(f[i].split(',')[variable])
+			currData.append(currValue)
+			currMean+=currValue
+		stddevs.append(standardDeviation(currData))
 		currMean/=len(f)
 		means.append(currMean)
 			
@@ -211,11 +236,13 @@ def barVar(variable,ylabel,name,filename):
 	p.xlabel('Brain Number')
 	p.ylabel(ylabel)
 	p.title(name)
-	if 'green' in filename: p.bar(range(8),means,color='green')
-	elif 'red' in filename: p.bar(range(8),means,color='red')
-	elif 'blue' in filename: p.bar(range(8),means,color='blue')
-	else:p.bar(range(8),means)
-	p.savefig(filename+'.png')
+	p.bar(range(8),means,color=c,yerr=stddevs)
+
+	sdString='-'
+	for sd in stddevs:
+		sdString+=str(sd)+'-'
+
+	p.savefig(filename+sdString[0:-1]+'.png')
 
 def plotDRgauss(brain):
 	f=open(brain+'/'+brain+'data.txt','r').read().split('\n')[0:-1]
@@ -240,9 +267,11 @@ def plotDRgauss(brain):
 	y=[rotationY,distanceY]
 	rotationSD='%.2f'%standardDeviation(rotationX)
 	distanceSD='%.2f'%(standardDeviation(distanceX))
-	s='sigma='
+	sdString="r%s-d%s"%(rotationSD,distanceSD)
+	#s='sigma='
+	labels=['degrees rotated','distance traveled forward']
 	colors=['red','blue']
-	labels=['units: degrees rotated\n'+s+rotationSD,'units: distance traveled\n'+s+distanceSD]
+	#labels=['units: degrees rotated\n'+s+rotationSD,'units: distance traveled\n'+s+distanceSD]
 
 	#make the plot
 	
@@ -250,11 +279,11 @@ def plotDRgauss(brain):
 	for i in range(len(x)):
 		p.plot(x[i],y[i],label=labels[i],color=colors[i])
 
-	p.xlabel('Units Traveled')
-	p.ylabel('Number of Epochs Occured')
-	p.title('travelGauss')
+	p.xlabel('Degrees Rotated/Forward Motion')
+	p.ylabel('Epoch Count')
+	p.title('Movement Distribution')
 	p.legend()
-	p.savefig(brain+'/travelGauss.png')
+	p.savefig(brain+'/travelGauss-'+sdString+'.png')
 
 
 

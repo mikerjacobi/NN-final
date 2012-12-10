@@ -19,7 +19,7 @@ def generatePlots():
 	brains=[]
 
 	#survival bucketsizes
-	sbs={0:10,1:10,2:50,3:250,4:500,5:1000,6:1000,7:2000}	
+	sbs={0:10,1:10,2:50,3:250,4:500,5:1000,6:1000,7:1000}	
 
 	for i in range(8): brains.append('brain'+str(i))
 	for brain in brains:
@@ -41,23 +41,23 @@ def generatePlots():
 
 	#p.barVar(variable number, ylabel, plot title, save filename)
 	#avgtimestepsa
-	p.barVar(2,'Average Timesteps Survived','Survival Duration per Epoch as Brain Sophistication Increases', 'survivalBar')	
+	p.barVar(2,'Average Timesteps Survived','Survival Duration per Epoch as Brain Sophistication Increases', 'survivalBar','orange')	
 
 	#avgavgenergy
-	p.barVar(3,'Average Energy', 'Average Energy per Epoch as Brain Sophistication Increases', 'avgEnergyBar')
+	p.barVar(3,'Average Energy', 'Average Energy per Epoch as Brain Sophistication Increases', 'avgEnergyBar','orange')
 	
 	#avgHPN
-	p.barVar(5,'Green Food Eaten', 'Green Food Eaten per Epoch as Brain Sophistication Increases', 'greenBar')
-	p.barVar(6,'Blue Food Eaten', 'Blue Food Eaten per Epoch as Brain Sophistication Increases', 'blueBar')
-	p.barVar(7,'Red Food Eaten', 'Red Food Eaten per Epoch as Brain Sophistication Increases', 'redBar')
+	p.barVar(5,'Green Food Eaten', 'Green Food Eaten per Epoch as Brain Sophistication Increases', 'greenBar','green')
+	p.barVar(6,'Blue Food Eaten', 'Blue Food Eaten per Epoch as Brain Sophistication Increases', 'blueBar','blue')
+	p.barVar(7,'Red Food Eaten', 'Red Food Eaten per Epoch as Brain Sophistication Increases', 'redBar','red')
 
 	#avgDistancetraveled
-	p.barVar(9,'Distance Traveled', 'Distance Traveled per Epoch as Brain Sophistication Increases', 'distanceBar')
+	p.barVar(9,'Distance Traveled', 'Distance Traveled per Epoch as Brain Sophistication Increases', 'distanceBar','orange')
 
 	#connections/neurons/networks
-	p.barVar(10,'Number of Neural Connection', 'Neural Connection Number as Brain Sophistication Increases', 'connectionBar')
-	p.barVar(11, 'Number of Neurons', 'Neuron Count as Brain Sophistication Increases', 'neuronBar')
-	p.barVar(12, 'Number of Neural Networks', 'Neural Network Count as Brain Sophistication Increases', 'networkBar')
+	p.barVar(10,'Number of Neural Connection', 'Neural Connection Number as Brain Sophistication Increases', 'connectionBar','orange')
+	p.barVar(11, 'Number of Neurons', 'Neuron Count as Brain Sophistication Increases', 'neuronBar','orange')
+	p.barVar(12, 'Number of Neural Networks', 'Neural Network Count as Brain Sophistication Increases', 'networkBar','orange')
 	
 
 
