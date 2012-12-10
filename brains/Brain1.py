@@ -15,8 +15,8 @@ class Brain1:
 	distanceTraveled=0
 	energy=[]
 	startTime=0
-	constantFB=.25
-	constantBR=.55
+	constantFB=0
+	constantBR=0
 
 	def set_brain(self):
 		pass
@@ -42,7 +42,8 @@ class Brain1:
 		#food network
 		n=self.networks[0][0]
 		n.propagate()
-		eat=n.y
+		#eat=n.y
+		eat=0
 
 		#movement network
 		moveNeurons=self.networks[1]
@@ -88,7 +89,13 @@ class Brain1:
 
         
 		#record data
-		f=open('data/%s/%sdata.txt'%(self.name,self.name),'a')
+		velocityTest=1
+		if velocityTest:
+			f=open('data/brain1/velocity2.txt','a')
+		else:
+			f=open('data/%s/%sdata.txt'%(self.name,self.name),'a')
+
+
 		info='%d,%d,%d,%f,%f,%d,%d,%d,%d,%d,%d,%d,%d\n'%(self.startTime,survivalTime,self.numTimesteps,averageEnergy,self.constantFB,self.healthEaten,self.neutralEaten,self.poisonEaten,self.totalRotation,self.distanceTraveled,numConnections,numNeurons,numNetworks)
 		f.write(info)
 		print info
@@ -104,6 +111,9 @@ class Brain1:
 		self.numTimesteps=0
 		self.healthEaten,self.poisonEaten,self.neutralEaten=0,0,0
 		self.totalRotation,self.distanceTraveled=0,0
+
+		self.constantFB+=.01
+		self.networks[1][0]=Neuron([1],None,1,'front-back','constant',self.constantFB,None)
 
 	def learn(self,dcharge):
 		return 1
