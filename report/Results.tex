@@ -18,16 +18,17 @@
 %% error analysis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
-Here we shall present the results we acquired from our experiments. We will
+Here we shall present the results that we acquired from our experiments. We will
 describe our generic testbed, so should the reader wish to follow along in
 real time they may have the option of doing so. After this, the performance 
-of each brain will be evaluated individually.
+of each brain will be evaluated individually. Finally we will compare the models
+to each other.
 
 \subsection{Testbed}
 All of our experiments were performed within the Flatworld II v.1.0 
-environment. Our code was writen in Python 2.6, and interfaced with 
+environment. Our code was written in Python 2.6, and interfaced with 
 Flatworld's C-based API via a shim (see section \ref{sec:Ack}). All of our
-runs were done on a Lenovo Ideapad T430 with an Intel i7 quad core processor
+runs were done on a Lenovo ThinkPad W510 with an Intel i7 quad core processor
 and 16GB of DDR3 RAM. Windows 7 Pro 64bit is the machine's native platform,
 but we ran our tests inside a virtual machine using VMware 8.04. The virtual
 machine was configured with Ubuntu 10.04 32bit, 1GB of RAM and a single 2GHz
@@ -39,7 +40,8 @@ We start our data presentation with Brain 0 (a very good place to start).
 It should come as no surprise that brain 0's lifespan is 2000 time steps. 
 The agent makes no moves, and makes no attempts to eat anything. 
 Figure \ref{fig:brain0energy} shows an agent's average energy depletion over 
-time based upon 153 runs. The bar has been set, as they say.
+time based upon 153 runs. When the agent is idle, the energy decreases 
+linearly. The bar has been set, as they say.
 
 \begin{figure}
 \begin{center}
@@ -64,8 +66,8 @@ lifespan of our agents to be exactly 2000 time steps.
 
 
 \subsection{Brain 1}
-It should come as no surprise that Brain 1's performance will show
-little improvement upon Brain 0. This is due to the fact that not only is
+It may be a surprise that Brain 1's performance worse than that of Brain 0. 
+This is due to the fact that not only is
 it relying on food to be directly in its path, but it also is expending 
 \emph{more} energy from the act of moving. Figure \ref{fig:brain1velo} shows
 that increasing the agent's velocity will cause its energy to decrease
@@ -117,7 +119,7 @@ eyelet neuron. The average lifespan for agents endowed with Brain 2 was
 \end{figure}
 
 Brain 3, which introduced the sigmoid neuron, also performed more poorly
-than Brain 0, with a an average lifespan of 1581.63. The standard deviation
+than Brain 0, with an average lifespan of 1581.63. The standard deviation
 improved from Brain 2, though.
 
 \begin{figure}
@@ -130,19 +132,19 @@ improved from Brain 2, though.
 
 Also, via figure \ref{fig:brain3wghts}, you can see that the sigmoid neuron 
 was behaving properly; weights were
-adjusted after viewing each object using the formula\cite{Haykin}
+adjusted after viewing each object using the following formula\cite{Haykin}:
 
 \begin{equation}
   w_i(n+1) = w_i + \eta e(n) \varphi'(n) x_i(n)
 \end{equation}
 
-What we were left with is a high food probability with a positive output,
-a high poison probability with negative outputs, and a likely neutral object 
-for very, very small outputs.
+This neuron will produce a positive value if it thinks it's seeing a food 
+object, a negative value if it thinks the object is poisonous, and a near-zero
+value if it thinks it's neutral.
 
-At this point we should mention that, after we had gotten satisfactory 
-convergence, we decided to turn off learning for the sigmoid neuron(s) and use 
-hard-coded values. The trial runs we had for Brain 3 proved that our color
+At this point we should mention that, after we had satisfactory 
+convergence, we decided to turn off learning for future sigmoid neuron(s). The 
+trial runs we had for Brain 3 proved that our color
 classifier neuron was indeed doing its job.
 
 
@@ -156,11 +158,10 @@ classifier neuron was indeed doing its job.
 \end{center}
 \end{figure}
 
-Agents sporting Brain 4 lived to ripe ages that has not been seen in previous
-models (fig. \ref{fig:brain4his}); sporting an average lifespan of 12480. This is also 
-the first Brain 
-to implement a WTA network for the visual cortex and allow for directional 
-change.
+Agents sporting Brain 4 lived to ripe ages that had not been seen in previous
+models (fig. \ref{fig:brain4his}); the average agent has a lifespan of about
+12480. This is also the first brain 
+to implement a WTA network for the visual cortex and allow for rotation.
 
 
 \subsection{Brain 5}
@@ -189,7 +190,7 @@ slightly less than a 6\% improvement over Brain 4's average lifetime.
 
 Agents equipped with Brain 6, who consider object color before causing the 
 agent to eat, saw further improvement (fig. \ref{fig:brain6his}). The average 
-time-to-death of the agents was 16374.08. The standard deviation also decreased.
+time-to-death of agents was 16374.08. The standard deviation also decreased.
 
 
 \subsection{Brain 7}
@@ -201,7 +202,7 @@ time-to-death of the agents was 16374.08. The standard deviation also decreased.
 \end{center}
 \end{figure}
 
-Brain 7 saw another massive jump in the agents' vitality 
+Brain 7 saw another massive jump in vitality 
 (fig. \ref{fig:brain7his}). An average lifetime of 27623.54 is an improvement
 of approximately 40\% over Brain 6. Note, too, that there is a large increase 
 in the standard deviation of those lifetimes.
@@ -216,5 +217,14 @@ in the standard deviation of those lifetimes.
 \end{center}
 \end{figure}
 
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=.65]{plots/move.png}
+  \caption{Average movement per model}
+  \label{fig:move}
+\end{center}
+\end{figure}
+
 Figure \ref{fig:survive} shows a side-by-side comparison of an agent's 
-projected lifespan given its brain model.
+projected lifespan given its brain model. Figure \ref{fig:move} also 
+describes how far the agents tended to travel given a particular brain.
