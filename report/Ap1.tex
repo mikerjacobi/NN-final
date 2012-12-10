@@ -1,1 +1,505 @@
+
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{graphicx}
+
+
+\begin{document}
+
 \section{Model Architecture} \label{ap:arch}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain1complete.png}
+  \caption{Complete Neural Architecture for Brain1 }
+  \label{fig:brain1complete}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2complete.png}
+  \caption{Complete Neural Architecture for Brain2 }
+  \label{fig:brain2complete}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain3complete.png}
+  \caption{Complete Neural Architecture for Brain3 }
+  \label{fig:brain3complete}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4complete.png}
+  \caption{Complete Neural Architecture for Brain4 }
+  \label{fig:brain4complete}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5complete.png}
+  \caption{Complete Neural Architecture for Brain5 }
+  \label{fig:brain5complete}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6complete.png}
+  \caption{Complete Neural Architecture for Brain6 }
+  \label{fig:brain6complete}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7complete.png}
+  \caption{Complete Neural Architecture for Brain7 }
+  \label{fig:brain7complete}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7complete.png}
+  \caption{Complete Neural Architecture for Brain7 }
+  \label{fig:brain7complete}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/avgEnergyBar-0.0-0.0-0.04-0.03-0.02-0.05-0.04-0.01.png}
+  \caption{Average Average-Energy of Agent per Epoch per Brain }
+  \label{fig:avgenergybar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/blueBar-0.0-0.0-2.85-1.76-15.72-42.67-3.31-4.54.png}
+  \caption{Average Neutral Food Items Consumed per Epoch per Brain }
+  \label{fig:bluebar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/connectionBar-0.0-0.0-0.0-0.0-0.0-0.0-0.0-0.0.png}
+  \caption{Summation of Input Neurons over all Neurons }
+  \label{fig:connectionbar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/distanceBar-0.0-0.0-56.89-38.55-531.39-563.6-534.63-481.99.png}
+  \caption{Average Total Distance Traveled per Epoch per Brain }
+  \label{fig:distancebar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/greenBar-0.0-0.0-1.32-0.69-29.79-21.82-15.12-24.72.png}
+  \caption{Average Healthy Food Items Consumed per Epoch per Brain  }
+  \label{fig:greenbar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/networkBar-0.0-0.0-0.0-0.0-0.0-0.0-0.0-0.0.png}
+  \caption{Number of Independent Neural Networks per Brain }
+  \label{fig:networkbar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/neuronBar-0.0-0.0-0.0-0.0-0.0-0.0-0.0-0.0.png}
+  \caption{Total Number of Neurons per Brain }
+  \label{fig:neuronbar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/redBar-0.0-0.0-4.0-2.23-18.21-19.44-4.58-4.97.png}
+  \caption{Average Poison Food Items Consumed per Epoch per Brain  }
+  \label{fig:redbar}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/survivalBar-0.11-0.11-227.69-154.23-2125.55-2254.41-2138.59-4506.76.png}
+  \caption{Average Number of Time Steps Survived per Epoch per Brain}
+  \label{fig:survivalbar}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%brain 1
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain1/1353130043-0.250000-EvT.png}
+  \caption{Brain 1 Energy over Time for a Random Epoch}
+  \label{fig:b1evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain1/avgenergyGauss-0.01.png}
+  \caption{Brain 1 Distribution of Average Energies per Epoch}
+  \label{fig:b1avgenergy}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+%brain 2
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2/1353128412-0.250000-EvT.png}
+  \caption{Brain 2 Energy over Time for a Random Epoch}
+  \label{fig:b2evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2/avgenergyGauss-0.07.png}
+  \caption{Brain 2 Distribution of Average Energies per Epoch}
+  \label{fig:b2avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2/foodGauss-h2.0-n5.16-p7.75.png}
+  \caption{Brain 2 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b2food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2/survivalGauss-435.55.png}
+  \caption{Brain 2 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b2survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain2/travelGauss-r0.00-d200.00.png}
+  \caption{Brain 2 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b2travel}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%brain 3
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain3/avgenergyGauss-0.05.png}
+  \caption{Brain 3 Distribution of Average Energies per Epoch}
+  \label{fig:b3avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain3/foodGauss-h1.12-n2.24-p3.35.png}
+  \caption{Brain 3 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b3food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain3/survivalGauss-353.55.png}
+  \caption{Brain 3 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b3survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain3/travelGauss-r150.00-d200.00.png}
+  \caption{Brain 3 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b3travel}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%brain 4
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4/1354432461-1.000000-EvT.png}
+  \caption{Brain 4 Energy over Time for a Random Epoch}
+  \label{fig:b4evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4/avgenergyGauss-0.04.png}
+  \caption{Brain 4 Distribution of Average Energies per Epoch}
+  \label{fig:b4avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4/foodGauss-h37.79-n23.82-p30.68.png}
+  \caption{Brain 4 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b4food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4/survivalGauss-3172.14.png}
+  \caption{Brain 4 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b4survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain4/travelGauss-r5389.65-d916.52.png}
+  \caption{Brain 4 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b4travel}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%brain 5
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5/1354471986-5.000000-EvT.png}
+  \caption{Brain 5 Energy over Time for a Random Epoch}
+  \label{fig:b5evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5/avgenergyGauss-0.07.png}
+  \caption{Brain 5 Distribution of Average Energies per Epoch}
+  \label{fig:b5avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5/foodGauss-h27.29-n52.8-p31.64.png}
+  \caption{Brain 5 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b5food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5/survivalGauss-3872.22.png}
+  \caption{Brain 5 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b5survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain5/travelGauss-r7664.03-d1032.80.png}
+  \caption{Brain 5 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b5travel}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+%brain 6
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6/1355176281-0.250000-EvT.png}
+  \caption{Brain 6 Energy over Time for a Random Epoch}
+  \label{fig:b6evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6/avgenergyGauss-0.05.png}
+  \caption{Brain 6 Distribution of Average Energies per Epoch}
+  \label{fig:b6avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6/foodGauss-h19.99-n5.74-p8.62.png}
+  \caption{Brain 6 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b6food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6/survivalGauss-3452.05.png}
+  \caption{Brain 6 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b6survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain6/travelGauss-r3203.12-d916.52.png}
+  \caption{Brain 6 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b6travel}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%brain 7
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7/1354746755-0.250000-EvT.png}
+  \caption{Brain 7 Energy over Time for a Random Epoch}
+  \label{fig:b7evt}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7/avgenergyGauss-0.01.png}
+  \caption{Brain 7 Distribution of Average Energies per Epoch}
+  \label{fig:b7avgenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7/foodGauss-h30.46-n6.32-p7.75.png}
+  \caption{Brain 7 Distribution of Food Items Eaten per Epoch}
+  \label{fig:b7food}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7/survivalGauss-6835.36.png}
+  \caption{Brain 7 Distribution of Time Steps Survived per Epoch}
+  \label{fig:b7survive}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[scale=1.0]{img/brain7/travelGauss-r6482.71-d916.52.png}
+  \caption{Brain 7 Distribution of Number of Degrees Rotated and Units Travelled Forward per Epoch}
+  \label{fig:b7travel}
+\end{center}
+\end{figure}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
