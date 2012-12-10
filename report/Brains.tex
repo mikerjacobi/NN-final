@@ -46,7 +46,7 @@ change, then the brightness threshold is increased.
 
 \subsection{Brain 3}
 
-For Brain 4, we actually made two changes. The first was to the
+For Brain 3, we actually made two changes. The first was to the
 eye neuron, which we changed from a step function to a sigmoid 
 (fig. \ref{fig:brain3eye}):
 
@@ -88,10 +88,11 @@ gnashing its teeth at every time step.
 
 Our mission for Brain 4 was to implement the eyelets into a
 winner-take-all network (fig. \ref{fig:brain4}). Each eyelet input is fed 
-into two neurons: one \textb{step function} to determine green/not green, and 
+into two neurons: one \textbf{step function} to determine green/not green, and 
 another 
-which produced the linear summation of each color's intensity. The product of 
-these two neurons' outputs is then fed into a 31-element WTA network. All 
+which produced the linear summation of each color's intensity. These outputs
+were fed into product neurons, which subsequently output to a 31-element WTA 
+network. All 
 neurons in this network connect to a single neuron that controls the rotation 
 of the agent, and this neuron has fixed weights coming into it. Each of these 
 weights correspond to an angle, which is the direction that eyelet is looking. 
@@ -99,7 +100,7 @@ These angles are used to instruct the agent where to turn.
 
 \begin{figure}
 \begin{center}
-  \includegraphics[scale=.62]{img/brain4.png}
+  \includegraphics[scale=.52]{img/brain4.png}
   \caption{Brain 4's WTA eyelet network}
   \label{fig:brain4}
 \end{center}
@@ -127,11 +128,12 @@ of our agent; why would it eat poison when it should know better? In order
 to circumvent this greedy, potentially deadly tendency, we added a
 color-based neuron to the agent's somatic-gastronomic system 
 (fig. \ref{fig:brain6}). The somatic neuron will only fire if there is a
-non-zero value \emph{for the ``mouth'' of the agent}. Correspondingly, the
+non-zero value for the ``mouth'' of the agent. Correspondingly, the
 color-based neuron will only fire if an object in contact with it is green.
 This is legal to assume, as the agent itself is aware of its own body. It will
 never try to eat unless it has made contact with and object, and even then
-will only do so if the object is green.
+will only do so if the object is green. This behavior is guaranteed by an
+AND neuron, which serves as a gate between the touch and color neurons.
 
 \begin{figure}
 \begin{center}
@@ -164,8 +166,9 @@ other models, fig. \ref{fig:brain7} is put into use under the special
 circumstances that our agent is very close to a food object, but is not hungry.
 A constant value describes the forward movement rate (0.25 in this case). At 
 every timestep the agent queries its internal charge. While its charge is 
-$> 0.9$, the logical NOT will suppress the AND, giving the forward/backward 
+$> 0.9$, the logical NOT will suppress the AND neuron, giving the 
+forward/backward 
 actuator a value of $0.25 \times 0 = 0$. Provided the object in question is 
 close enough (described by the intensity neuron), when the agent's energy dips
-below 0.9, the NOT neuron fires, the AND neuron is satisfied and fires a
-non-zero value.
+below 0.9 the NOT neuron fires, the AND neuron is satisfied, and it fires a
+non-zero value to the product neuron.
